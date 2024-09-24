@@ -196,6 +196,7 @@ alias di='docker images'               # List Docker images
 alias h='history'                      # Show command history
 alias path='echo $PATH'                # Display the current PATH variable
 alias grep='grep --color=auto'         # Highlight matching text in grep
+alias gui='kex --win -s'		   # Open WinKex Gui
 # ======================================================================= #
 
 # ========================== PATH Configuration ========================== #

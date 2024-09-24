@@ -39,4 +39,5 @@ function grep { wsl grep $args }      # Alias for grep (text search utility)
 function vim { wsl nvim $args }       # Alias for Vim (Neovim)
 function vi { wsl nvim $args }        # Alias for Vi (Neovim)
 function nvim { wsl nvim $args }      # Alias for Neovim
+function gui { wsl -d kali-linux kex --win -s } # Winkex Gui 
 # ===================================================================== #
