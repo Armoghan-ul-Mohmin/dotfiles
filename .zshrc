@@ -5,10 +5,6 @@
 # Managed with Zinit for enhanced performance
 # ============================================================
 
-# ========================== Starship Initialization ===================== #
-eval "$(starship init zsh)"
-# ======================================================================= #
-
 # ========================= Zsh Plugin Manager ========================= #
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 if [ ! -d "$ZINIT_HOME" ]; then
@@ -200,7 +196,6 @@ alias di='docker images'               # List Docker images
 alias h='history'                      # Show command history
 alias path='echo $PATH'                # Display the current PATH variable
 alias grep='grep --color=auto'         # Highlight matching text in grep
-
 # ======================================================================= #
 
 # ========================== PATH Configuration ========================== #
@@ -215,6 +210,10 @@ export PATH="/sbin:$PATH"                                # Essential sbin
 export PATH="/bin:$PATH"                                 # Essential bin
 export PATH="/usr/lib/wsl/lib:$PATH"                     # WSL libraries
 export PATH="/mnt/c/Users/armoghan/AppData/Local/Microsoft/WindowsApps:$PATH"  # Windows Apps
+# ======================================================================= #
+
+# ========================== Starship Initialization ===================== #
+eval "$(starship init zsh)"
 # ======================================================================= #
 
 # ========================= Custom Functions ========================== #
