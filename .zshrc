@@ -186,6 +186,7 @@ alias code='code .'                    # Open Visual Studio Code in current dire
 alias help='tldr --color always'       # Use tldr with color support
 alias lg='lazygit.exe'                 # Launch LazyGit
 alias z='zellij'                       # Launch Zellij
+alias github='cd /mnt/f/Github'        # Change dir to github 
 
 # Docker Management
 alias dps='docker ps'                  # List running Docker containers
