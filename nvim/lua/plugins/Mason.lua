@@ -11,6 +11,7 @@ return {
         },
     },
     event = "VeryLazy",
+    lazy = true,
     config = function()
         -- Setup LSP servers
         local lspconfig = require("lspconfig")
@@ -42,7 +43,6 @@ return {
                 "clangd",        -- C/C++
                 "jsonls",        -- JSON
                 "dockerls",      -- Dockerfile
-                "taplo",         -- TOML
                 "marksman",      -- Markdown
             },
         })

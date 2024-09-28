@@ -92,7 +92,7 @@ return {
                 vim.cmd.colorscheme("dracula")
                 require("dracula").setup({
                     show_end_of_buffer = true,
-                    transparent_bg = true,
+                    transparent_bg = false,
                     italic_comment = true,
                 })
             end,
@@ -103,7 +103,7 @@ return {
             config = function()
                 require("nightfox").setup({
                     options = {
-                        transparent = true,
+                        transparent = false,
                         styles = {
                             comments = "italic",
                             keywords = "bold",

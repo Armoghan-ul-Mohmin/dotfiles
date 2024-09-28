@@ -212,6 +212,7 @@ export PATH="/sbin:$PATH"                                # Essential sbin
 export PATH="/bin:$PATH"                                 # Essential bin
 export PATH="/usr/lib/wsl/lib:$PATH"                     # WSL libraries
 export PATH="/mnt/c/Users/armoghan/AppData/Local/Microsoft/WindowsApps:$PATH"  # Windows Apps
+export PATH=$PATH:/usr/local/bin/npm                     # NPM binaries
 # ======================================================================= #
 
 # ========================== Starship Initialization ===================== #

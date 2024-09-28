@@ -1,6 +1,6 @@
 return {
     "codota/tabnine-nvim",
-    build = "./dl_binaries.sh",
+    build = "./dl_binaries.sh ",
     event = "InsertEnter",
     config = function()
         require("tabnine").setup({
@@ -13,7 +13,7 @@ return {
                 from_vim_lsp = true,
                 from_tabnine = true,
             },
-            max_num_results = 5,
+            max_num_results = 10,
             inline_snippet = true,
             experimental = {
                 enable_advanced_snippets = true,

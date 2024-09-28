@@ -11,6 +11,7 @@ return {
         },
     },
     event = "VeryLazy",
+    lazy = true,
     config = function()
         local null_ls = require("null-ls")
 
