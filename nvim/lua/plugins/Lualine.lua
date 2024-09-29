@@ -6,6 +6,18 @@ return {
             "nvim-tree/nvim-web-devicons",
             lazy = true,
         },
+        {
+            "codota/tabnine-nvim",
+            lazy = true,
+        },
+        {
+            "SmiteshP/nvim-navic",  
+            lazy = true,
+        },
+        {
+            "nvim-lua/lsp-status.nvim", 
+            lazy = true,
+        },
     },
     config = function()
         require("lualine").setup({
@@ -33,7 +45,7 @@ return {
                     {
                         "diagnostics",
                         sources = { "nvim_lsp", "nvim_diagnostic" },
-                        symbols = { error = " ", warn = " ", info = " " },
+                        symbols = { error = " ", warn = " ", info = " ", hint = " " },
                     },
                 },
                 lualine_c = {
@@ -59,7 +71,7 @@ return {
                 lualine_b = {},
                 lualine_c = {},
                 lualine_x = { "location" },
-                lualine_y = {},
+                lualine_y = { 'tabnine' },
                 lualine_z = {},
             },
             tabline = {
@@ -74,18 +86,16 @@ return {
             winbar = {
                 lualine_c = {
                     {
-                        path = 1,
-                        shorting_target = 40,
-                        symbols = {
-                            modified = "●",
-                        },
+                        "navic", -- To show context info like functions, methods, etc.
+                        navic_opts = { separator = ' → ' },
+                        cond = function() return require("nvim-navic").is_available() end,
                     },
                 },
             },
             inactive_winbar = {
                 lualine_c = { "filename" },
             },
-            extensions = { "fugitive" },
+            extensions = { "fugitive", "quickfix", "nvim-tree", "nvim-dap-ui", "symbols-outline" },
         })
     end,
 }
