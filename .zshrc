@@ -377,15 +377,18 @@ process() {
         fi
     fi
 }
-
 # ======================================================================= #
 
 # ========================= Keybindings ========================== #
-zle -N edit-widget edit  # Create a new Zsh line editor widget for editing
-bindkey '^e' edit-widget  # Bind Ctrl+E to the edit function
+# Create a new Zsh line editor widget for editing
+zle -N edit-widget edit  
+# Bind Ctrl+E to the edit function
+bindkey '^e' edit-widget  
+
+# Create a new Zsh line editor widget for the print_file_path function
+zle -N print-file-path print_file_path  
 # Bind Ctrl+F to the print_file_path function
-zle -N print-file-path print_file_path  # Create a new Zsh line editor widget for the function
-bindkey '^F' print-file-path  # Bind Ctrl+F to the function
+bindkey '^F' print-file-path  
 # ======================================================================= #
 
 clear 
