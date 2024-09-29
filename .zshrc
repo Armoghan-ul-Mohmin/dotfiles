@@ -197,7 +197,13 @@ alias di='docker images'               # List Docker images
 alias h='history'                      # Show command history
 alias path='echo $PATH'                # Display the current PATH variable
 alias grep='grep --color=auto'         # Highlight matching text in grep
-alias gui='kex --win -s'		   # Open WinKex Gui
+alias gui='kex --win -s'		       # Open WinKex Gui
+
+#  Distrobox
+alias alpine="distrobox enter alpine"   # Open Alpine Distrobox Container
+alias fedora="distrobox enter fedora"   # Open Fedora Distrobox Container
+alias arch="distrobox enter arch"       # Open Arch Distrobox Container
+
 # ======================================================================= #
 
 # ========================== PATH Configuration ========================== #
@@ -287,53 +293,91 @@ stop() {
 }
 
 # Function to manage system services using fzf
-# Function to manage system services using fzf
 process() {
     # Check if systemd is available
-    if ! systemctl >/dev/null 2>&1; then
-        echo -e "\e[31m❌ Error: This system does not use systemd.\e[0m"
-        return
-    fi
+    if systemctl >/dev/null 2>&1; then
+        local service
+        service=$(systemctl list-units --type=service --no-pager | awk '{print $1 " " $2 " " $3}' | fzf \
+            --header='⚙️  Select a Service (systemd)' \
+            --preview 'echo -e "\e[1;34mService Info:\e[0m\n\n\e[1;32mService Name:\e[0m \e[1;36m{1}\e[0m\n\n\e[1;33mStatus:\e[0m\n$(systemctl status {1} --no-pager --lines=10 | tail -n +2 | sed -e "s/^\(\[.*\]\)/\e[34m\1\e[0m/")\n\n\e[1;35mDescription:\e[0m\n$(systemctl show -p Description --no-pager {1} | sed -e "s/^Description=//")"' \
+            --preview-window=right:50% \
+            --border \
+            --height=100% \
+            --ansi \
+            --reverse \
+            --no-info \
+            --query '')
 
-    local service
-    service=$(systemctl list-units --type=service --no-pager | awk '{print $1 " " $2 " " $3}' | fzf \
-        --header='⚙️ Select a service' \
-        --preview 'echo -e "\e[1;34mService Info:\e[0m\n\n\e[1;32mService Name:\e[0m \e[1;36m{1}\e[0m\n\n\e[1;33mStatus:\e[0m\n$(systemctl status {1} --no-pager --lines=10 | tail -n +2 | sed -e "s/^\(\[.*\]\)/\e[34m\1\e[0m/")\n\n\e[1;35mDescription:\e[0m\n$(systemctl show -p Description --no-pager {1} | sed -e "s/^Description=//")"' \
-        --preview-window=right:50% \
-        --border \
-        --height=100% \
-        --ansi \
-        --reverse \
-        --no-info \
-        --query '')
+        if [[ -n $service ]]; then
+            local service_name
+            service_name=$(echo "$service" | awk '{print $1}')
 
-    if [[ -n $service ]]; then
-        local service_name
-        service_name=$(echo "$service" | awk '{print $1}')
+            echo -e "\n\e[32m🔧 Managing Service: \e[1;36m$service_name\e[0m\n"
+            select action in "Start" "Stop" "Restart" "Status"; do
+                case $action in
+                    Start)
+                        sudo systemctl start "$service_name" && echo -e "\e[32m✅ Service $service_name started successfully!\e[0m" || echo -e "\e[31m❌ Error: Failed to start service $service_name\e[0m"
+                        ;;
+                    Stop)
+                        sudo systemctl stop "$service_name" && echo -e "\e[31m❌ Service $service_name stopped.\e[0m" || echo -e "\e[31m❌ Error: Failed to stop service $service_name\e[0m"
+                        ;;
+                    Restart)
+                        sudo systemctl restart "$service_name" && echo -e "\e[33m🔄 Service $service_name restarted successfully!\e[0m" || echo -e "\e[31m❌ Error: Failed to restart service $service_name\e[0m"
+                        ;;
+                    Status)
+                        echo -e "\n\e[1;34mService Status:\e[0m"
+                        sudo systemctl status "$service_name"
+                        ;;
+                    *)
+                        echo -e "\e[31m❌ Invalid option selected.\e[0m"
+                        ;;
+                esac
+                break
+            done
+        fi
+    else
+        local service
+        service=$(service --status-all | awk '{print $4 " " $1}' | fzf \
+            --header='⚙️  Select a Service (non-systemd)' \
+            --preview 'echo -e "\e[1;34mService Info:\e[0m\n\n\e[1;32mService Name:\e[0m \e[1;36m{1}\e[0m\n\n\e[1;33mStatus:\e[0m\n$(service {1} status 2>/dev/null || echo "Service not found")\n\n\e[1;35mDescription:\e[0m\n$(service {1} status 2>/dev/null | grep "Description" || echo "No description available")"' \
+            --preview-window=right:50% \
+            --border \
+            --height=100% \
+            --ansi \
+            --reverse \
+            --no-info \
+            --query '')
 
-        echo -e "\e[32m🔧 Managing service: \e[36m$service_name\e[0m"
-        select action in "Start" "Stop" "Restart" "Status"; do
-            case $action in
-                Start)
-                    sudo systemctl start "$service_name" && echo -e "\e[32m✅ Service $service_name started\e[0m" || echo -e "\e[31m❌ Error: Failed to start service $service_name\e[0m"
-                    ;;
-                Stop)
-                    sudo systemctl stop "$service_name" && echo -e "\e[31m❌ Service $service_name stopped\e[0m" || echo -e "\e[31m❌ Error: Failed to stop service $service_name\e[0m"
-                    ;;
-                Restart)
-                    sudo systemctl restart "$service_name" && echo -e "\e[33m🔄 Service $service_name restarted\e[0m" || echo -e "\e[31m❌ Error: Failed to restart service $service_name\e[0m"
-                    ;;
-                Status)
-                    sudo systemctl status "$service_name"
-                    ;;
-                *)
-                    echo -e "\e[31m❌ Invalid option\e[0m"
-                    ;;
-            esac
-            break
-        done
+        if [[ -n $service ]]; then
+            local service_name
+            service_name=$(echo "$service" | awk '{print $1}')
+
+            echo -e "\n\e[32m🔧 Managing Service: \e[1;36m$service_name\e[0m\n"
+            select action in "Start" "Stop" "Restart" "Status"; do
+                case $action in
+                    Start)
+                        sudo service "$service_name" start && echo -e "\e[32m✅ Service $service_name started successfully!\e[0m" || echo -e "\e[31m❌ Error: Failed to start service $service_name\e[0m"
+                        ;;
+                    Stop)
+                        sudo service "$service_name" stop && echo -e "\e[31m❌ Service $service_name stopped.\e[0m" || echo -e "\e[31m❌ Error: Failed to stop service $service_name\e[0m"
+                        ;;
+                    Restart)
+                        sudo service "$service_name" restart && echo -e "\e[33m🔄 Service $service_name restarted successfully!\e[0m" || echo -e "\e[31m❌ Error: Failed to restart service $service_name\e[0m"
+                        ;;
+                    Status)
+                        echo -e "\n\e[1;34mService Status:\e[0m"
+                        sudo service "$service_name" status
+                        ;;
+                    *)
+                        echo -e "\e[31m❌ Invalid option selected.\e[0m"
+                        ;;
+                esac
+                break
+            done
+        fi
     fi
 }
+
 # ======================================================================= #
 
 # ========================= Keybindings ========================== #
@@ -343,3 +387,7 @@ bindkey '^e' edit-widget  # Bind Ctrl+E to the edit function
 zle -N print-file-path print_file_path  # Create a new Zsh line editor widget for the function
 bindkey '^F' print-file-path  # Bind Ctrl+F to the function
 # ======================================================================= #
+
+clear 
+
+neofetch
