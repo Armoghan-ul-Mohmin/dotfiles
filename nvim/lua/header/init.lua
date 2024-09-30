@@ -1,61 +1,143 @@
 local M = {}
 
--- Function to get the Git username
-local function get_git_username()
-    local username = vim.fn.system("git config user.name"):gsub("\n", "")
-    if username == "" then
-        username = vim.fn.input("Enter Author Name: ")
-    end
-    return username
-end
+local name = require("header.author")
+local description = require("header.description")
+local usage = require("header.usage")
 
--- Function to insert the header
+local headers = {
+    sh = [[
+#!/bin/bash
+# ===================================================================
+# File name:     {filename}
+# Author:        {author}
+# Date:          {date}
+# Description:   {description}
+# Usage:         {usage}
+# ===================================================================
+]],
+    python = [[
+#!/usr/bin/env python3
+"""
+===================================================================
+File name:     {filename}
+Author:        {author}
+Date:          {date}
+Description:   {description}
+Usage:         {usage}
+===================================================================
+"""
+]],
+    ruby = [[
+#!/usr/bin/env ruby
+# ===================================================================
+# File name:     {filename}
+# Author:        {author}
+# Date:          {date}
+# Description:   {description}
+# Usage:         {usage}
+# ===================================================================
+]],
+    lua = [[
+-- ================================================================
+-- File name:     {filename}
+-- Author:        {author}
+-- Date:          {date}
+-- Description:   {description}
+-- Usage:         {usage}
+-- ================================================================
+]],
+    go = [[
+/*
+ * ===================================================================
+ * File name:     {filename}
+ * Author:        {author}
+ * Date:          {date}
+ * Description:   {description}
+ * Usage:         {usage}
+ * ===================================================================
+ */
+]],
+    c = [[
+/*
+ * ===================================================================
+ * File name:     {filename}
+ * Author:        {author}
+ * Date:          {date}
+ * Description:   {description}
+ * Usage:         {usage}
+ * ===================================================================
+ */
+]],
+    cpp = [[
+/*
+ * ===================================================================
+ * File name:     {filename}
+ * Author:        {author}
+ * Date:          {date}
+ * Description:   {description}
+ * Usage:         {usage}
+ * ===================================================================
+ */
+]],
+    java = [[
+/*
+ * ===================================================================
+ * File name:     {filename}
+ * Author:        {author}
+ * Date:          {date}
+ * Description:   {description}
+ * ===================================================================
+ */
+]],
+    powershell = [[
+ <#
+ ===================================================================
+ File name:     {filename}
+ Author:        {author}
+ Date:          {date}
+ Description:   {description}
+ Usage:         {usage}
+ ===================================================================
+ #>
+]],
+    dockerfile = [[
+# ===================================================================
+# File name:     {filename}
+# Author:        {author}
+# Date:          {date}
+# Description:   {description}
+# Usage:         {usage}
+# ===================================================================
+]],
+    vbscript = [[
+' ===================================================================
+' File name:     {filename}
+' Author:        {author}
+' Date:          {date}
+' Description:   {description}
+' Usage:         {usage}
+' ===================================================================
+]]
+}
+
 function M.insert_header()
-    local filename = vim.fn.expand('%:t')
-    local author = get_git_username()
-    local license = vim.fn.input("Enter License: (MIT, GPL, Apache-2.0, BSD, Creative Commons) ")
-    local usage = vim.fn.input("Enter Usage: ")
-    local os = vim.fn.input("Enter Operating System: (Linux, Windows, macOS, Other) ")
-    local description = vim.fn.input("Enter Description: ")
-
-    -- Define the shebang based on the file type
-    local shebang = ""
     local filetype = vim.bo.filetype
-    if filetype == "python" then
-        shebang = "#!/usr/bin/env python3\n"
-    elseif filetype == "bash" then
-        shebang = "#!/bin/bash\n"
-    elseif filetype == "lua" then
-        shebang = "#!/usr/bin/env lua\n"
-    elseif filetype == "javascript" then
-        shebang = "#!/usr/bin/env node\n"
-    elseif filetype == "ruby" then
-        shebang = "#!/usr/bin/env ruby\n"
+    local header = headers[filetype]
+
+    if header then
+        local author_name = name.get_author_name()
+        local description_text = description.get_description()
+        local filename = vim.fn.expand("%:t")
+        local usage_text = usage.get_usage()
+
+        local formatted_header =
+            header:gsub("{date}", os.date("%Y-%m-%d")):gsub("{filename}", filename):gsub(
+            "{description}",
+            description_text
+        ):gsub("{author}", author_name):gsub("{usage}", usage_text)
+
+        vim.api.nvim_buf_set_lines(0, 0, 0, false, vim.split(formatted_header, "\n"))
     end
-
-    -- Create the header string
-    local header = string.format([[
-%s# Filename: %s
-# Author: %s
-# License: %s
-# Usage: %s
-# Operating System: %s
-# Description: %s
-]], shebang, filename, author, license, usage, os, description)
-
-    -- Insert header at the top of the file
-    local bufnr = vim.api.nvim_get_current_buf()
-    local lines = vim.split(header, '\n')
-    vim.api.nvim_buf_set_lines(bufnr, 0, 0, false, lines)
-    print("Header inserted.")
 end
-
--- Autocommand to insert header on new file creation
-vim.api.nvim_create_autocmd("BufNewFile", {
-    pattern = { "*.py", "*.lua", "*.sh", "*.js", "*.rb" }, -- Add your desired file types
-    callback = function()
-        M.insert_header()
-    end
-})
 
 return M

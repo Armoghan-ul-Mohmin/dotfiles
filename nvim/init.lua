@@ -59,6 +59,18 @@ require("mappings.Lsp")
 
 -- ==================================== File Header ====================================
 
-require("header")
+-- Load custom headers module
+local custom_headers = require("header")
+
+-- Set up autocmd for BufNewFile
+vim.api.nvim_create_autocmd(
+    "BufNewFile",
+    {
+        pattern = "*",
+        callback = function()
+            custom_headers.insert_header()
+        end
+    }
+)
 
 -- =====================================================================================
