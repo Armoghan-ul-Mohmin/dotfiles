@@ -1,6 +1,6 @@
 return {
     "codota/tabnine-nvim",
-    build = "./dl_binaries.sh ",
+    build = "./dl_binaries.sh ; cd chat ; timeout 300 cargo build --release",
     event = "InsertEnter",
     config = function()
         require("tabnine").setup({

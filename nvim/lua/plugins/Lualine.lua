@@ -11,7 +11,7 @@ return {
             lazy = true,
         },
         {
-            "SmiteshP/nvim-navic",  
+            "SmiteshP/nvim-navic",
             lazy = true,
         },
         {
@@ -62,7 +62,7 @@ return {
                     { "progress", color = { fg = "#ff9e64" } },
                 },
                 lualine_z = {
-                    "hostname",
+                    { "hostname" },  
                     { "date", format = "%d/%m/%Y %H:%M:%S", icon = "🕒" },
                 },
             },
@@ -71,8 +71,8 @@ return {
                 lualine_b = {},
                 lualine_c = {},
                 lualine_x = { "location" },
-                lualine_y = { 'tabnine' },
-                lualine_z = {},
+                lualine_y = { "tabnine" }, 
+                lualine_z = { "lsp_progress" }, 
             },
             tabline = {
                 lualine_a = {
@@ -86,7 +86,7 @@ return {
             winbar = {
                 lualine_c = {
                     {
-                        "navic", -- To show context info like functions, methods, etc.
+                        "navic", 
                         navic_opts = { separator = ' → ' },
                         cond = function() return require("nvim-navic").is_available() end,
                     },
