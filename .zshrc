@@ -190,7 +190,7 @@ alias code='code .'                    # Open Visual Studio Code in current dire
 alias help='tldr --color always'       # Use tldr with color support
 alias lg='lazygit.exe'                 # Launch LazyGit
 alias z='zellij'                       # Launch Zellij
-alias github='cd /mnt/f/Github'        # Change dir to github 
+alias github='cd /mnt/f/Github'        # Change dir to github
 
 # Docker Management
 alias dps='docker ps'                  # List running Docker containers
@@ -381,7 +381,24 @@ process() {
         fi
     fi
 }
+
 # ======================================================================= #
+
+# =========================== Onefetch on CD =============================== #
+run_onefetch() {
+    # Check if the current directory is a Git repository
+    if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+        clear
+        # Run onefetch if it's a Git repository
+        onefetch
+    fi
+}
+
+# Hook that runs after changing directories
+chpwd() {
+    run_onefetch
+}
+# =========================================================================== #
 
 # ========================= Keybindings ========================== #
 # Create a new Zsh line editor widget for editing
@@ -394,7 +411,3 @@ zle -N print-file-path print_file_path
 # Bind Ctrl+F to the print_file_path function
 bindkey '^F' print-file-path  
 # ======================================================================= #
-
-clear 
-
-neofetch

@@ -15,3 +15,12 @@ themes {
         white "#cdd6f4"
     }
 }
+
+keybinds {
+  normal {
+    bind "Ctrl g" { SwitchToMode "locked"; }
+    bind "Ctrl p" { SwitchToMode "pane"; }
+    bind "Alt p" { NewPane; }
+    bind "Alt h" "Alt Left" { MoveFocusOrTab "Left"; }
+  }
+}

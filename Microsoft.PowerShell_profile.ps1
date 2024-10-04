@@ -137,9 +137,3 @@ Invoke-Expression -Command ($(zoxide init powershell) -join "`n")
 # Alias 'j' to 'zoxide' for easy navigation
 Set-Alias j z
 # ================================================================== #
-
-
-# ===================== Clear Console and Display Info =====================
-Clear-Host                                                   # Clear the console
-winfetch.ps1                                                 # Display system information using winfetch
-# ===================================================================== #
