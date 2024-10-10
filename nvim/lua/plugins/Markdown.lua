@@ -10,7 +10,8 @@ return {
             vim.g.mkdp_auto_open = 1
             vim.g.mkdp_highlight_line = 1
             vim.g.mkdp_open_to_the_world = 1
-            vim.g.mkdp_port = 8080
+            vim.g.mkdp_port = 3000
+            vim.g.mkdp_open_ip = 'localhost'
             vim.g.mkdp_preview_options = {
                 mkit = true,
                 disable_sync_scroll = false,
