@@ -56,6 +56,7 @@ Set-Alias h Get-History                                                         
 Set-Alias grep Select-String                                                    # Use 'grep' to search strings
 Set-Alias lg lazygit.exe                                                        # Launch LazyGit
 Set-Alias htop ntop.exe                                                         # Launch Htop 
+Set-Alias t 'tig'                                                               # Launch Tig
 
 # Networking
 function ip { curl ipinfo.io/ip }      # Get your public IP address

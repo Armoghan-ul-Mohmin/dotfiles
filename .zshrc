@@ -181,6 +181,7 @@ alias gp='git.exe push'                # Push changes to the remote repository
 alias gpl='git pull'                   # Pull changes from the remote repository
 alias gs='git status'                  # Show git status
 alias ga='git add'                     # Add changes to the staging area
+alias t='tig'                         # Use Tig Git Enhance Viewer
 
 # Networking
 alias ip='curl ipinfo.io/ip'          # Get your public IP address
@@ -201,7 +202,7 @@ alias di='docker images'               # List Docker images
 alias h='history'                      # Show command history
 alias path='echo $PATH'                # Display the current PATH variable
 alias grep='grep --color=auto'         # Highlight matching text in grep
-alias gui='kex --win -s'		       # Open WinKex Gui
+alias gui='kex --win -s'		           # Open WinKex Gui
 
 #  Distrobox
 alias alpine="distrobox enter alpine"   # Open Alpine Distrobox Container
@@ -213,7 +214,7 @@ alias arch="distrobox enter arch"       # Open Arch Distrobox Container
 # ========================== PATH Configuration ========================== #
 export PATH="$HOME/.cargo/bin:$PATH"                     # Cargo binaries
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"       # Homebrew binaries
-export PATH="$HOME/.nix-profile/bin:$PATH"		   # Nix binaries
+export PATH="$HOME/.nix-profile/bin:$PATH"		           # Nix binaries
 export PATH="/usr/local/sbin:$PATH"                      # Local sbin
 export PATH="/usr/local/bin:$PATH"                       # Local bin
 export PATH="/usr/sbin:$PATH"                            # System sbin
